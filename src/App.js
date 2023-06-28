@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
       <header className="App-header">
-      <nav>
+      <nav className='NavBar'>
         <ul>
           <li>
             <NavLink to="/">Home</ NavLink>
