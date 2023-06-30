@@ -1,5 +1,6 @@
 //import FoodFetch from "../components/foodFetch"
 import { useEffect, useState } from "react"
+//import config from "../config/index.js";
 
 export default function HomePage(){
     const [userInput, setUserInput] = useState("apple")
@@ -9,6 +10,7 @@ export default function HomePage(){
     //const [start, setStart] = useState(false);
     const [foodDisplay, setFoodDisplay] = useState("")
     const [foodList, setFoodList] = useState([])
+    const [foodListOutput, setFoodListOutput] = useState()
 
 
     async function FoodFetch(input){
@@ -16,7 +18,7 @@ export default function HomePage(){
         const options = {
           method: 'GET',
           headers: {
-            'X-RapidAPI-Key': 'ceb6181e97msha7525d0e7f9f296p1511d5jsna51407a657b5',
+            'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
             'X-RapidAPI-Host': 'edamam-food-and-grocery-database.p.rapidapi.com'
           }
         };
@@ -40,13 +42,20 @@ export default function HomePage(){
         let tempObj = {
             image: foodResponse.food.image,
             name: foodResponse.food.label,
-            Calories: foodResponse.food.nutrients.ENERC_KCAL,
-            Fat: foodResponse.food.nutrients.FAT,
-            Fiber: foodResponse.food.nutrients.FIBTG,
-            Protein: foodResponse.food.nutrients.PROCNT
+            calories: foodResponse.food.nutrients.ENERC_KCAL,
+            fat: foodResponse.food.nutrients.FAT,
+            fiber: foodResponse.food.nutrients.FIBTG,
+            protein: foodResponse.food.nutrients.PROCNT
         }
+        let tempArr = foodList;
+        tempArr.push(tempObj);
+        setFoodList(tempArr);
     }
 
+    const setFoodOutput = ()=>{
+        let tempArr = []
+        
+    }
 
     const handleChange = (event)=>{
         setUserInput(event.target.value);
@@ -72,7 +81,7 @@ export default function HomePage(){
                 <p>Fat: {foodResponse.food.nutrients.FAT} g</p>
                 <p>Fiber: {foodResponse.food.nutrients.FIBTG} g</p>
                 <p>Protein: {foodResponse.food.nutrients.PROCNT} g</p>
-                <button type="button" className="Btn" onClick={}>Add to List</button>
+                <button type="button" className="Btn" onClick={addFood}>Add to List</button>
                 </div>)
             //     console.log(data)
             // })
