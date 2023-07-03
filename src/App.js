@@ -8,10 +8,14 @@ function App() {
     <div className="App">
       <BrowserRouter>
       <header className="App-header">
+        <h2>Fast Tracker</h2>
       <nav className='NavBar'>
         <ul>
           <li>
             <NavLink to="/">Home</ NavLink>
+          </li>
+          <li>
+            <NavLink to="/recipe">Recipe Finder</ NavLink>
           </li>
 
         </ul>
@@ -20,6 +24,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/recipe" element={<RecipePage />} />
       </Routes>
 
       </BrowserRouter>

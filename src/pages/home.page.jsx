@@ -3,11 +3,11 @@ import { useEffect, useState } from "react"
 //import config from "../config/index.js";
 
 export default function HomePage(){
-    const [userInput, setUserInput] = useState("apple")
+    const [userInput, setUserInput] = useState("")
     const [foodSearch, setFoodSearch] = useState();
     const [foodResponse, setFoodResponse] = useState();
-    // const [nutrientsResponse, setNutrientsResponse] = useState();
-    //const [start, setStart] = useState(false);
+    const [nutrientsResponse, setNutrientsResponse] = useState();
+    const [start, setStart] = useState(false);
     const [foodDisplay, setFoodDisplay] = useState("")
     const [foodList, setFoodList] = useState([])
     const [foodListOutput, setFoodListOutput] = useState()
@@ -27,25 +27,57 @@ export default function HomePage(){
             const response = await fetch(url, options);
             const result = await response.json();
             console.log(result);
-            setFoodResponse(result.hints[0]);
+            setFoodResponse(result.parsed[0]);
         } catch (error) {
             console.error(error);
         }
         }
 
-        //function for the "Post" half of Edamam API for additional nutrition info, currently unable to locate syntax for post body
-    // async function NutrientsFetch(){
+        async function NutrientsFetch(){
+            if (foodResponse){
+            const url = `https://api.edamam.com/api/food-database/v2/nutrients?app_id=5acdf7a2&app_key=%2046c8ecc03e52de97010eb0abe25203fa%09`;
+            const options = {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json'
+              },
+              body: JSON.stringify({
+                ingredients: [
+                    {
+                        quantity: foodResponse.quantity,
+                        measureURI: foodResponse.measure.uri,
+                        qualifiers: [],
+                        foodId: foodResponse.food.foodId
+                    }
+                ]
+            })
+            };
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result);
+                setNutrientsResponse(result);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+            }
 
-    // }
+            useEffect(()=>{
+                NutrientsFetch();
+            }, [foodResponse])
 
     const addFood = ()=>{
         let tempObj = {
+            quantity: foodResponse.quantity,
+            measure: foodResponse.measure.label,
             image: foodResponse.food.image,
             label: foodResponse.food.label,
-            calories: foodResponse.food.nutrients.ENERC_KCAL,
-            fat: foodResponse.food.nutrients.FAT,
-            fiber: foodResponse.food.nutrients.FIBTG,
-            protein: foodResponse.food.nutrients.PROCNT
+            calories: nutrientsResponse.calories,
+            fat: nutrientsResponse.totalNutrients.FAT.quantity,
+            fiber: nutrientsResponse.totalNutrients.FIBTG.quantity,
+            protein: nutrientsResponse.totalNutrients.PROCNT.quantity,
+            sugar: nutrientsResponse.totalNutrients.SUGAR.quantity
         }
         let tempArr = foodList;
         tempArr.push(tempObj);
@@ -67,9 +99,10 @@ export default function HomePage(){
         <img src={item.image}/>
         <p>{item.label}</p>
         <p>Calories: {item.calories} Cal</p>
-        <p>Fat: {item.fat} g</p>
-        <p>Fiber: {item.fiber} g</p>
-        <p>Protein: {item.protein} g</p>
+        <p>Fat: {Math.round(item.fat * 100) / 100} g</p>
+        <p>Fiber: {Math.round(item.fiber * 100) / 100} g</p>
+        <p>Protein: {Math.round(item.protein * 100) / 100} g</p>
+        <p>Sugar: {Math.round(item.sugar * 100) / 100} g</p>
         </div>
         )});
         }
@@ -77,9 +110,9 @@ export default function HomePage(){
 
     }
 
-    // useEffect(()=>{
-    //     foodOutputRender();
-    // }, [])
+    useEffect(()=>{
+        foodOutputRender();
+    }, [])
 
     const handleChange = (event)=>{
         setUserInput(event.target.value);
@@ -87,8 +120,8 @@ export default function HomePage(){
 
     const submitFoodSearch = ()=>{
         setFoodSearch(userInput);
-        console.log(userInput);
-        //setStart(true);
+        //console.log(userInput);
+        setStart(true);
     }
     useEffect(()=>{
         FoodFetch(foodSearch);
@@ -96,15 +129,16 @@ export default function HomePage(){
 
     const renderFoodResponse = ()=>{
         let tempArr = [];
-        if (foodResponse){
+        if (nutrientsResponse){
             // tempArr = foodResponse.map((data)=>{
             tempArr.push(<div className="SearchDisplay">
                 <img src={foodResponse.food.image}/>
-                <p>{foodResponse.food.label}</p>
-                <p>Calories: {foodResponse.food.nutrients.ENERC_KCAL} Cal</p>
-                <p>Fat: {foodResponse.food.nutrients.FAT} g</p>
-                <p>Fiber: {foodResponse.food.nutrients.FIBTG} g</p>
-                <p>Protein: {foodResponse.food.nutrients.PROCNT} g</p>
+                <p>{foodResponse.quantity} {foodResponse.measure.label}(s) {foodResponse.food.label}</p>
+                <p>Calories: {nutrientsResponse.calories} Cal</p>
+                <p>Fat: {Math.round(nutrientsResponse.totalNutrients.FAT.quantity * 100) / 100} g</p>
+                <p>Fiber: {Math.round(nutrientsResponse.totalNutrients.FIBTG.quantity * 100) / 100} g</p>
+                <p>Protein: {Math.round(nutrientsResponse.totalNutrients.PROCNT.quantity * 100) / 100} g</p>
+                <p>sugar: {Math.round(nutrientsResponse.totalNutrients.SUGAR.quantity * 100) / 100} g</p>
                 <button type="button" className="Btn" onClick={addFood}>Add to List</button>
                 </div>)
             //     console.log(data)
@@ -115,7 +149,7 @@ export default function HomePage(){
 
     useEffect(()=>{
         renderFoodResponse()
-    }, [foodResponse])
+    }, [nutrientsResponse])
 
     return(
         <div>
