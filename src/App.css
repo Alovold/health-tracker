@@ -54,3 +54,9 @@
   align-items: center;
   flex-direction: column;
 }
+
+.attribution{
+  display: flex;
+  justify-content: right;
+  margin-top: 3px;
+}

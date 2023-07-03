@@ -83,17 +83,25 @@ export default function HomePage(){
         tempArr.push(tempObj);
         setFoodList(tempArr);
         //console.log(foodList)
+        saveFoodList()
         foodOutputRender();
     }
 
+    const saveFoodList = ()=>{
+        localStorage.setItem("foodList", JSON.stringify(foodList))
+    }
+
+    // useEffect(()=>{
+    //     saveFoodList();
+    // }, [foodList])
 
     
     const foodOutputRender = ()=>{
         let tempArr = [];
-
+        const storedList = JSON.parse(localStorage.getItem("foodList"))
         //console.log(foodList)
-        if (foodList){
-        tempArr = foodList.map((item)=>{
+        if (storedList){
+        tempArr = storedList.map((item)=>{
             return (
         <div className="CardDisplay">
         <img src={item.image}/>
@@ -153,6 +161,9 @@ export default function HomePage(){
 
     return(
         <div>
+            <div className="attribution">
+            <div id="edamam-badge" data-color="white"></div>
+            </div>
             <div className="FormCard">
                 <p>Type what you've eaten today! (More details will give better response accuracy!)</p>
                 <div className="InputField">

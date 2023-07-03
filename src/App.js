@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-import { HomePage, RecipePage } from './pages';
+import { HomePage, RecipePage, GoalsPage } from './pages';
 import './App.css';
 import M from 'materialize-css';
 
@@ -17,6 +17,9 @@ function App() {
           <li>
             <NavLink to="/recipe">Recipe Finder</ NavLink>
           </li>
+          <li>
+            <NavLink to="/goals">Nutrition Goals</ NavLink>
+          </li>
 
         </ul>
       </nav>
@@ -25,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/recipe" element={<RecipePage />} />
+        <Route path="/goals" element={<GoalsPage />} />
       </Routes>
 
       </BrowserRouter>
