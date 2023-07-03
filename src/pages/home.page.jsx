@@ -41,7 +41,7 @@ export default function HomePage(){
     const addFood = ()=>{
         let tempObj = {
             image: foodResponse.food.image,
-            name: foodResponse.food.label,
+            label: foodResponse.food.label,
             calories: foodResponse.food.nutrients.ENERC_KCAL,
             fat: foodResponse.food.nutrients.FAT,
             fiber: foodResponse.food.nutrients.FIBTG,
@@ -50,12 +50,36 @@ export default function HomePage(){
         let tempArr = foodList;
         tempArr.push(tempObj);
         setFoodList(tempArr);
+        //console.log(foodList)
+        foodOutputRender();
     }
 
-    const setFoodOutput = ()=>{
-        let tempArr = []
-        
+
+    
+    const foodOutputRender = ()=>{
+        let tempArr = [];
+
+        //console.log(foodList)
+        if (foodList){
+        tempArr = foodList.map((item)=>{
+            return (
+        <div className="CardDisplay">
+        <img src={item.image}/>
+        <p>{item.label}</p>
+        <p>Calories: {item.calories} Cal</p>
+        <p>Fat: {item.fat} g</p>
+        <p>Fiber: {item.fiber} g</p>
+        <p>Protein: {item.protein} g</p>
+        </div>
+        )});
+        }
+        setFoodListOutput(tempArr);
+
     }
+
+    // useEffect(()=>{
+    //     foodOutputRender();
+    // }, [])
 
     const handleChange = (event)=>{
         setUserInput(event.target.value);
@@ -104,6 +128,7 @@ export default function HomePage(){
             </div>
             <div>
                 {foodDisplay}
+                {foodListOutput}
             </div>
         </div>
     )

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-import { HomePage } from './pages';
+import { HomePage, RecipePage } from './pages';
 import './App.css';
 import M from 'materialize-css';
 
