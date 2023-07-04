@@ -22,6 +22,9 @@ function App() {
           </li>
 
         </ul>
+        <div className="attribution">
+        <div id="edamam-badge" data-color="badge"></div>
+        </div>
       </nav>
       </header>
 

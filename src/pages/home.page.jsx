@@ -91,9 +91,13 @@ export default function HomePage(){
         localStorage.setItem("foodList", JSON.stringify(foodList))
     }
 
-    // useEffect(()=>{
-    //     saveFoodList();
-    // }, [foodList])
+    const getFoodList = ()=>{
+        setFoodList(JSON.parse(localStorage.getItem("foodList")));
+    }
+
+    useEffect(()=>{
+        getFoodList();
+    }, [])
 
     
     const foodOutputRender = ()=>{
@@ -105,7 +109,7 @@ export default function HomePage(){
             return (
         <div className="CardDisplay">
         <img src={item.image}/>
-        <p>{item.label}</p>
+        <p>{item.quantity} {item.measure} {item.label}</p>
         <p>Calories: {item.calories} Cal</p>
         <p>Fat: {Math.round(item.fat * 100) / 100} g</p>
         <p>Fiber: {Math.round(item.fiber * 100) / 100} g</p>
@@ -141,7 +145,7 @@ export default function HomePage(){
             // tempArr = foodResponse.map((data)=>{
             tempArr.push(<div className="SearchDisplay">
                 <img src={foodResponse.food.image}/>
-                <p>{foodResponse.quantity} {foodResponse.measure.label}(s) {foodResponse.food.label}</p>
+                <p>{foodResponse.quantity} {foodResponse.measure.label} {foodResponse.food.label}</p>
                 <p>Calories: {nutrientsResponse.calories} Cal</p>
                 <p>Fat: {Math.round(nutrientsResponse.totalNutrients.FAT.quantity * 100) / 100} g</p>
                 <p>Fiber: {Math.round(nutrientsResponse.totalNutrients.FIBTG.quantity * 100) / 100} g</p>
@@ -161,9 +165,7 @@ export default function HomePage(){
 
     return(
         <div>
-            <div className="attribution">
-            <div id="edamam-badge" data-color="white"></div>
-            </div>
+
             <div className="FormCard">
                 <p>Type what you've eaten today! (More details will give better response accuracy!)</p>
                 <div className="InputField">

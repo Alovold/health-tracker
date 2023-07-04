@@ -48,28 +48,28 @@ export default function GoalsPage() {
     return (
         <div>
             <div className="InputField">
-                <label for="calInput">Calorie Goal</label>
+                <label htmlFor="calInput">Calorie Goal</label>
                 <input  id="calInput" type="number" onChange={handleCalChange} value={calInput}/>
                 <p>Current Calorie Goal: {localStorage.getItem("calGoal")}</p>
             </div>
             <div className="InputField">
-                <label for="proInput">Protein Goal</label>
-                <input id="proInput" type="text" onChange={handleProChange} value={proInput}/>
+                <label htmlFor="proInput">Protein Goal</label>
+                <input id="proInput" type="number" onChange={handleProChange} value={proInput}/>
                 <p>Current Protein Goal: {localStorage.getItem("proGoal")}</p>
             </div>
             <div className="InputField">
-                <label for="fibInput">Fiber Goal</label>
-                <input id="fibInput" type="text" onChange={handleFibChange} value={fibInput}/>
+                <label htmlFor="fibInput">Fiber Goal</label>
+                <input id="fibInput" type="number" onChange={handleFibChange} value={fibInput}/>
                 <p>Current Fiber Goal: {localStorage.getItem("fibGoal")}</p>
             </div>
             <div className="InputField">
-                <label for="sugInput">Sugar Limit</label>
-                <input id="sugInput" type="text" onChange={handleSugChange} value={sugInput}/>
+                <label htmlFor="sugInput">Sugar Limit</label>
+                <input id="sugInput" type="number" onChange={handleSugChange} value={sugInput}/>
                 <p>Current Sugar Limit: {localStorage.getItem("sugGoal")}</p>
             </div>
             <div className="InputField">
-                <label for="fatInput">Fat Limit</label>
-                <input id="fatInput" type="text" onChange={handleFatChange} value={fatInput}/>
+                <label htmlFor="fatInput">Fat Limit</label>
+                <input id="fatInput" type="number" onChange={handleFatChange} value={fatInput}/>
                 <p>Current Fat Limit: {localStorage.getItem("fatGoal")}</p>
             </div>
             <button className="Btn" onClick={saveGoals}>Submit</button>
