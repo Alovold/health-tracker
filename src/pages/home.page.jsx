@@ -3,14 +3,17 @@ import { useEffect, useState } from "react"
 //import config from "../config/index.js";
 
 export default function HomePage(){
-    const [userInput, setUserInput] = useState("")
+    const [userInput, setUserInput] = useState("");
     const [foodSearch, setFoodSearch] = useState();
     const [foodResponse, setFoodResponse] = useState();
     const [nutrientsResponse, setNutrientsResponse] = useState();
     const [start, setStart] = useState(false);
-    const [foodDisplay, setFoodDisplay] = useState("")
-    const [foodList, setFoodList] = useState([])
-    const [foodListOutput, setFoodListOutput] = useState()
+    const [foodDisplay, setFoodDisplay] = useState("");
+    const [foodList, setFoodList] = useState([]);
+    const [foodListOutput, setFoodListOutput] = useState();
+    const [measureURI, setMeasureURI] = useState("");
+    const [foodQuantity, setFoodQuantity] = useState();
+    const [measureLabel, setMeasureLabel] = useState("");
 
 
     async function FoodFetch(input){
@@ -27,7 +30,18 @@ export default function HomePage(){
             const response = await fetch(url, options);
             const result = await response.json();
             console.log(result);
-            setFoodResponse(result.parsed[0]);
+            if (result.parsed.length != 0){
+                setFoodResponse(result.parsed[0]);
+                setMeasureURI(result.parsed[0].measure.uri);
+                setFoodQuantity(result.parsed[0].quantity);
+                setMeasureLabel(result.parsed[0].measure.label);
+            }
+            else{
+                setFoodResponse(result.hints[0]);
+                setMeasureURI(result.hints[0].measures[0].uri);
+                setFoodQuantity(1);
+                setMeasureLabel(result.hints[0].measures[0].label);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -44,8 +58,8 @@ export default function HomePage(){
               body: JSON.stringify({
                 ingredients: [
                     {
-                        quantity: foodResponse.quantity,
-                        measureURI: foodResponse.measure.uri,
+                        quantity: foodQuantity,
+                        measureURI: measureURI,
                         qualifiers: [],
                         foodId: foodResponse.food.foodId
                     }
@@ -69,8 +83,8 @@ export default function HomePage(){
 
     const addFood = ()=>{
         let tempObj = {
-            quantity: foodResponse.quantity,
-            measure: foodResponse.measure.label,
+            quantity: foodQuantity,
+            measure: measureLabel,
             image: foodResponse.food.image,
             label: foodResponse.food.label,
             calories: nutrientsResponse.calories,
@@ -145,7 +159,7 @@ export default function HomePage(){
             // tempArr = foodResponse.map((data)=>{
             tempArr.push(<div className="SearchDisplay">
                 <img src={foodResponse.food.image}/>
-                <p>{foodResponse.quantity} {foodResponse.measure.label} {foodResponse.food.label}</p>
+                <p>{foodQuantity} {measureLabel} {foodResponse.food.label}</p>
                 <p>Calories: {nutrientsResponse.calories} Cal</p>
                 <p>Fat: {Math.round(nutrientsResponse.totalNutrients.FAT.quantity * 100) / 100} g</p>
                 <p>Fiber: {Math.round(nutrientsResponse.totalNutrients.FIBTG.quantity * 100) / 100} g</p>
@@ -173,6 +187,7 @@ export default function HomePage(){
                     <button className="Btn" onClick={submitFoodSearch}>Submit</button>
                 </div>
             </div>
+            <h3>Your Food List</h3>
             <div>
                 {foodDisplay}
                 {foodListOutput}
