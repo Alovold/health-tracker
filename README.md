@@ -23,7 +23,7 @@ Currently to run this project you will need to clone the repository, make sure t
 ## Usage
 This Project is used for searching the Edamam food and grocery database to create a list of foods eaten in the day, tracking various nutritional goals, and using the data from the list and goals in order to run a much more robust and helpful search through the Edamam Recipe database for meals to complete nutritional goals. Users may search for various foods using natural language processing and add various searches to their food list. Users may also add custom goals for various nutritional areas, such as calories or protein. Using this data or custom data, users may also search for recipes that match or are close to multiple features.
 
-## What-I-Learned
+## What I Learned
 I learned precise use of the useEffect hook and timely use of the useState hook in order to precisely control rerenders and API calls as the APIs being used have a call limit, leading me to need significant efficiency when making calls. I also learned multiple input styles and ensuring that the internal variables updated for user input before attempting to use the data, creating multiple chains of code in the process to ensure that code was executed in the proper order. This was also my first use of local variables, as such I learned a lot about their requirements and syntax, such as converting objects to JSON and parsing the data once I needed to use the stored object. The following is an example of fetching an array of objects from local storage:
 
 
@@ -55,7 +55,7 @@ There are no current tests for this application
 [Github page for Health-Tracker](https://github.com/Alovold/health-tracker)
 
 ## Questions?
-My gitHub user name is ALovolf, and you may email me at austin@lovolds.com for Questions.
+My gitHub user name is ALovold, and you may email me at austin@lovolds.com for Questions.
 You may contribute to this project by please emailing me with feedback!.
 
 ## License
