@@ -21,7 +21,7 @@ export default function HomePage(){
         const options = {
           method: 'GET',
           headers: {
-            'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
+            'X-RapidAPI-Key': process.env.REACT_APP_API_KEY_FOOD_SEARCH,
             'X-RapidAPI-Host': 'edamam-food-and-grocery-database.p.rapidapi.com'
           }
         };
@@ -49,7 +49,7 @@ export default function HomePage(){
 
         async function NutrientsFetch(){
             if (foodResponse){
-            const url = `https://api.edamam.com/api/food-database/v2/nutrients?app_id=5acdf7a2&app_key=%2046c8ecc03e52de97010eb0abe25203fa%09`;
+            const url = `https://api.edamam.com/api/food-database/v2/nutrients?app_id=${process.env.REACT_APP_NUTRITION_ID}&app_key=${process.env.REACT_APP_NUTRITION_KEY}`;
             const options = {
               method: 'POST',
               headers: {

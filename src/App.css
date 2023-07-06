@@ -69,4 +69,5 @@
 .DropdownDiv{
   display: flex;
   justify-content: center;
+  height: 80px;
 }
