@@ -106,23 +106,37 @@ export default function HomePage(){
     }
 
     const getFoodList = ()=>{
+        let temp = localStorage.getItem("foodList");
+        if(temp){
         setFoodList(JSON.parse(localStorage.getItem("foodList")));
+        }
     }
 
     useEffect(()=>{
         getFoodList();
     }, [])
 
+    const resetList = ()=>{
+        localStorage.setItem("foodList", []);
+        setFoodList([]);
+        
+    }
+
     
     const foodOutputRender = ()=>{
         let tempArr = [];
+        
+        if(localStorage.getItem("foodList")){
         const storedList = JSON.parse(localStorage.getItem("foodList"))
+        
         //console.log(foodList)
         if (storedList){
         tempArr = storedList.map((item)=>{
             return (
-        <div className="CardDisplay">
-        <img src={item.image}/>
+                <div className="CardDiv">
+        <div className="RecipeCard">
+        <img className="CardImg"src={item.image}/>
+        <div className="CardText">
         <p>{item.quantity} {item.measure} {item.label}</p>
         <p>Calories: {item.calories} Cal</p>
         <p>Fat: {Math.round(item.fat * 100) / 100} g</p>
@@ -130,15 +144,17 @@ export default function HomePage(){
         <p>Protein: {Math.round(item.protein * 100) / 100} g</p>
         <p>Sugar: {Math.round(item.sugar * 100) / 100} g</p>
         </div>
+        </div>
+        </div>
         )});
         }
-        setFoodListOutput(tempArr);
-
+    }
+    setFoodListOutput(tempArr);
     }
 
     useEffect(()=>{
         foodOutputRender();
-    }, [])
+    }, [foodList])
 
     const handleChange = (event)=>{
         setUserInput(event.target.value);
@@ -158,7 +174,7 @@ export default function HomePage(){
         if (nutrientsResponse){
             // tempArr = foodResponse.map((data)=>{
             tempArr.push(<div className="SearchDisplay">
-                <img src={foodResponse.food.image}/>
+                <img className="CardImg" src={foodResponse.food.image}/>
                 <p>{foodQuantity} {measureLabel} {foodResponse.food.label}</p>
                 <p>Calories: {nutrientsResponse.calories} Cal</p>
                 <p>Fat: {Math.round(nutrientsResponse.totalNutrients.FAT.quantity * 100) / 100} g</p>
@@ -187,10 +203,11 @@ export default function HomePage(){
                     <button className="Btn" onClick={submitFoodSearch}>Submit</button>
                 </div>
             </div>
-            <h3>Your Food List</h3>
             <div>
                 {foodDisplay}
+            <h3>Your Food List</h3>
                 {foodListOutput}
+                <button onClick={resetList}>Reset List</button>
             </div>
         </div>
     )

@@ -38,7 +38,7 @@
 }
 
 .NavBar{
-  background-color: #6a1b9a;
+  background-color: #9a871b;
 }
 
 .InputField{
@@ -64,10 +64,42 @@
 .DropdownList{
   display: flex;
   width: 120px;
+  height: 80px;
 }
 
 .DropdownDiv{
   display: flex;
   justify-content: center;
   height: 80px;
+}
+
+.RecipeCard{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #b2e4a8;
+  margin: 5px;
+  width: 60vw;
+  justify-content: space-between;
+}
+
+.CardImg{
+  height: 100px;
+  width: 100px;
+}
+
+.CardDiv{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.CardText{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  width: 50vw;
+  margin-right: 8px;
 }

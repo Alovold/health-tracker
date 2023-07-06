@@ -15,6 +15,7 @@ export default function RecipePage() {
   const [recipeSearch, setRecipeSearch] = useState("");
   const [userInput, setUserInput] = useState();
   const [start, setStart] = useState(false);
+  const [searchNum, setSearchNum] = useState(0);
   const [calGoal, setCalGoal] = useState(0);
   const [proGoal, setProGoal] = useState(0);
   const [fibGoal, setFibGoal] = useState(0);
@@ -44,8 +45,20 @@ export default function RecipePage() {
 
       tempArr = recipeResponse.map((item) => {
         return (
-          <div className="RecipeCard">
+            <div className="CardDiv">
             <p>Recipe: {item.recipe.label}</p>
+          <div className="RecipeCard">
+            <img className="CardImg" src={item.recipe.image}/>
+            <div className="CardText">
+            <p>Total Calories: {Math.round(item.recipe.calories * 100) / 100}</p>
+            <p>Total Protein: {Math.round(item.recipe.totalNutrients.PROCNT.quantity * 100) / 100} {item.recipe.totalNutrients.PROCNT.unit}</p>
+            <p>Total Fiber: {Math.round(item.recipe.totalNutrients.FIBTG.quantity * 100) / 100} {item.recipe.totalNutrients.FIBTG.unit}</p>
+            <p>Total Sugar: {Math.round(item.recipe.totalNutrients.SUGAR.quantity * 100) / 100} {item.recipe.totalNutrients.SUGAR.unit}</p>
+            <p>Total Fat: {Math.round(item.recipe.totalNutrients.FAT.quantity * 100) / 100} {item.recipe.totalNutrients.FAT.unit}</p>
+            <p>Servings made: {item.recipe.yield}</p>
+            <a href={item.recipe.url} target="_blank">Link to Recipe</a>
+            </div>
+          </div>
           </div>
         );
       });
@@ -58,12 +71,12 @@ export default function RecipePage() {
   }, [recipeResponse]);
 
   const calGoalMath = () => {
+    if(localStorage.getItem("foodList")){
     const storedList = JSON.parse(localStorage.getItem("foodList"));
     let total = 0;
     let diff = 0;
     storedList.map((item) => {
       total += item.calories;
-      console.log(item);
     });
     setCalCurrent(total);
     diff = calGoal - total;
@@ -72,9 +85,11 @@ export default function RecipePage() {
     } else {
       return diff;
     }
+} else {return 0;}
   };
 
   const proGoalMath = () => {
+    if(localStorage.getItem("foodList")){
     const storedList = JSON.parse(localStorage.getItem("foodList"));
     let total = 0;
     let diff = 0;
@@ -88,9 +103,11 @@ export default function RecipePage() {
     } else {
       return diff;
     }
+} else {return 0;}
   };
 
   const fibGoalMath = () => {
+    if(localStorage.getItem("foodList")){
     const storedList = JSON.parse(localStorage.getItem("foodList"));
     let total = 0;
     let diff = 0;
@@ -104,9 +121,11 @@ export default function RecipePage() {
     } else {
       return diff;
     }
+} else {return 0;}
   };
 
   const sugGoalMath = () => {
+    if(localStorage.getItem("foodList")){
     const storedList = JSON.parse(localStorage.getItem("foodList"));
     let total = 0;
     let diff = 0;
@@ -120,9 +139,11 @@ export default function RecipePage() {
     } else {
       return diff;
     }
+} else {return 0;}
   };
 
   const fatGoalMath = () => {
+    if(localStorage.getItem("foodList")){
     const storedList = JSON.parse(localStorage.getItem("foodList"));
     let total = 0;
     let diff = 0;
@@ -136,6 +157,7 @@ export default function RecipePage() {
     } else {
       return diff;
     }
+} else {return 0;}
   };
 
   const formSubmit = () => {
@@ -147,6 +169,7 @@ export default function RecipePage() {
     setMealTypeSearch(mealTypeInput);
     setDishTypeSearch(dishTypeInput);
     setStart(true);
+    setSearchNum(searchNum + 1);
   };
 
   const goalSubmit = () => {
@@ -158,6 +181,7 @@ export default function RecipePage() {
     setMealTypeSearch(mealTypeInput);
     setDishTypeSearch(dishTypeInput);
     setStart(true);
+    setSearchNum(searchNum + 1);
   };
 
   useEffect(()=>{
@@ -211,6 +235,7 @@ export default function RecipePage() {
     fibSearch,
     sugSearch,
     fatSearch,
+    searchNum,
   ]);
 
   useEffect(() => {
@@ -241,11 +266,11 @@ export default function RecipePage() {
   return (
     <div>
       <div>
-        <p>Current Calorie Goal:{Math.round(calCurrent * 100) / 100} / {localStorage.getItem("calGoal")}</p>
-        <p>Current Protein Goal:{Math.round(proCurrent * 100) / 100} / {localStorage.getItem("proGoal")}</p>
-        <p>Current Fiber Goal:{Math.round(fibCurrent * 100) / 100} / {localStorage.getItem("fibGoal")}</p>
-        <p>Current Sugar Limit:{Math.round(sugCurrent * 100) / 100} / {localStorage.getItem("sugGoal")}</p>
-        <p>Current Fat Limit:{Math.round(fatCurrent * 100) / 100} / {localStorage.getItem("fatGoal")}</p>
+        <p>Current Calorie Goal: {Math.round(calCurrent * 100) / 100} / {localStorage.getItem("calGoal")}</p>
+        <p>Current Protein Goal: {Math.round(proCurrent * 100) / 100} / {localStorage.getItem("proGoal")}</p>
+        <p>Current Fiber Goal: {Math.round(fibCurrent * 100) / 100} / {localStorage.getItem("fibGoal")}</p>
+        <p>Current Sugar Limit: {Math.round(sugCurrent * 100) / 100} / {localStorage.getItem("sugGoal")}</p>
+        <p>Current Fat Limit: {Math.round(fatCurrent * 100) / 100} / {localStorage.getItem("fatGoal")}</p>
         <div className="FormCard">
           <div className="DropdownDiv">
             <select
@@ -291,9 +316,10 @@ export default function RecipePage() {
             </select>
           </div>
           <div className="InputField">
+            <label>Calories to Search</label>
             <input type="number" onChange={handleChange} value={userInput} />
           </div>
-          <button onClick={formSubmit}>Get Recipes Based on Form</button>
+          <button onClick={formSubmit}>Get Recipes Based on Calorie Input</button>
           <button onClick={goalSubmit}>
             Get Recommended Recipes Based on Goals
           </button>
