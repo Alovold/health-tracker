@@ -38,9 +38,19 @@ export default function HomePage(){
             }
             else{
                 setFoodResponse(result.hints[0]);
+                if(result.hints[0].measures){
                 setMeasureURI(result.hints[0].measures[0].uri);
+                }
+                else {
+                    setMeasureURI("");
+                }
                 setFoodQuantity(1);
+                if(result.hints[0].measures){
                 setMeasureLabel(result.hints[0].measures[0].label);
+                }
+                else {
+                    setMeasureLabel("");
+                }
             }
         } catch (error) {
             console.error(error);
