@@ -12,7 +12,7 @@ export default function HomePage(){
     const [foodList, setFoodList] = useState([]);
     const [foodListOutput, setFoodListOutput] = useState();
     const [measureURI, setMeasureURI] = useState("");
-    const [foodQuantity, setFoodQuantity] = useState();
+    const [foodQuantity, setFoodQuantity] = useState(1);
     const [measureLabel, setMeasureLabel] = useState("");
 
 
@@ -32,24 +32,29 @@ export default function HomePage(){
             console.log(result);
             if (result.parsed.length != 0){
                 setFoodResponse(result.parsed[0]);
+                if(result.parsed[0].measure.uri){
                 setMeasureURI(result.parsed[0].measure.uri);
+                }
+                else {
+                    setMeasureURI("http://www.edamam.com/ontologies/edamam.owl#Measure_serving");
+                }
                 setFoodQuantity(result.parsed[0].quantity);
-                setMeasureLabel(result.parsed[0].measure.label);
+                if(result.parsed[0].measure.label){
+                    setMeasureLabel(result.parsed[0].measure.label);
+                }
+                else {
+                    setMeasureLabel("Serving");
+                }
             }
-            else{
+            else if(result.hints.length != 0){
                 setFoodResponse(result.hints[0]);
-                if(result.hints[0].measures){
                 setMeasureURI(result.hints[0].measures[0].uri);
-                }
-                else {
-                    setMeasureURI("");
-                }
                 setFoodQuantity(1);
-                if(result.hints[0].measures){
-                setMeasureLabel(result.hints[0].measures[0].label);
+                if (result.hints[0].measures[0].label){
+                    setMeasureLabel(result.hints[0].measures[0].label);
                 }
                 else {
-                    setMeasureLabel("");
+                    setMeasureLabel("Serving");
                 }
             }
         } catch (error) {
@@ -92,16 +97,44 @@ export default function HomePage(){
             }, [foodResponse])
 
     const addFood = ()=>{
+        let currentFat;
+        let currentFib;
+        let currentPro;
+        let currentSug;
+        if(nutrientsResponse.totalNutrients.FAT){
+            currentFat = nutrientsResponse.totalNutrients.FAT.quantity;
+        }
+        else {
+            currentFat = 0;
+        }
+        if(nutrientsResponse.totalNutrients.FIBTG){
+            currentFib = nutrientsResponse.totalNutrients.FIBTG.quantity;
+        }
+        else {
+            currentFib = 0;
+        }
+        if(nutrientsResponse.totalNutrients.PROCNT){
+            currentPro = nutrientsResponse.totalNutrients.PROCNT.quantity;
+        }
+        else {
+            currentPro = 0;
+        }
+        if(nutrientsResponse.totalNutrients.SUGAR){
+            currentSug = nutrientsResponse.totalNutrients.SUGAR.quantity;
+        }
+        else {
+            currentSug = 0;
+        }
         let tempObj = {
             quantity: foodQuantity,
             measure: measureLabel,
             image: foodResponse.food.image,
             label: foodResponse.food.label,
             calories: nutrientsResponse.calories,
-            fat: nutrientsResponse.totalNutrients.FAT.quantity,
-            fiber: nutrientsResponse.totalNutrients.FIBTG.quantity,
-            protein: nutrientsResponse.totalNutrients.PROCNT.quantity,
-            sugar: nutrientsResponse.totalNutrients.SUGAR.quantity
+            fat: currentFat,
+            fiber: currentFib,
+            protein: currentPro,
+            sugar: currentSug
         }
         let tempArr = foodList;
         tempArr.push(tempObj);
@@ -182,19 +215,47 @@ export default function HomePage(){
     const renderFoodResponse = ()=>{
         let tempArr = [];
         if (nutrientsResponse){
-            // tempArr = foodResponse.map((data)=>{
+            if (nutrientsResponse.totalWeight > 0){
+            let currentFat;
+            let currentFib;
+            let currentPro;
+            let currentSug;
+            if(nutrientsResponse.totalNutrients.FAT){
+                currentFat = Math.round(nutrientsResponse.totalNutrients.FAT.quantity * 100) / 100;
+            }
+            else {
+                currentFat = 0;
+            }
+            if(nutrientsResponse.totalNutrients.FIBTG){
+                currentFib = Math.round(nutrientsResponse.totalNutrients.FIBTG.quantity * 100) / 100;
+            }
+            else {
+                currentFib = 0;
+            }
+            if(nutrientsResponse.totalNutrients.PROCNT){
+                currentPro = Math.round(nutrientsResponse.totalNutrients.PROCNT.quantity * 100) / 100;
+            }
+            else {
+                currentPro = 0;
+            }
+            if(nutrientsResponse.totalNutrients.SUGAR){
+                currentSug = Math.round(nutrientsResponse.totalNutrients.SUGAR.quantity * 100) / 100;
+            }
+            else {
+                currentSug = 0;
+            }
             tempArr.push(<div className="SearchDisplay">
                 <img className="CardImg" src={foodResponse.food.image}/>
                 <p>{foodQuantity} {measureLabel} {foodResponse.food.label}</p>
                 <p>Calories: {nutrientsResponse.calories} Cal</p>
-                <p>Fat: {Math.round(nutrientsResponse.totalNutrients.FAT.quantity * 100) / 100} g</p>
-                <p>Fiber: {Math.round(nutrientsResponse.totalNutrients.FIBTG.quantity * 100) / 100} g</p>
-                <p>Protein: {Math.round(nutrientsResponse.totalNutrients.PROCNT.quantity * 100) / 100} g</p>
-                <p>sugar: {Math.round(nutrientsResponse.totalNutrients.SUGAR.quantity * 100) / 100} g</p>
+                <p>Fat: {currentFat} g</p>
+                <p>Fiber: {currentFib} g</p>
+                <p>Protein: {currentPro} g</p>
+                <p>sugar: {currentSug} g</p>
                 <button type="button" className="Btn" onClick={addFood}>Add to List</button>
                 </div>)
-            //     console.log(data)
-            // })
+
+            }
         }
         setFoodDisplay(tempArr);
     }
@@ -207,7 +268,7 @@ export default function HomePage(){
         <div>
 
             <div className="FormCard">
-                <p>Type what you've eaten today! (More details will give better response accuracy!)</p>
+                <p>Type what you've eaten today! (More details will give better response accuracy! ex. 2 Cups of Corn)</p>
                 <div className="InputField">
                     <input type="text" onChange={handleChange} value={userInput}/>
                     <button className="Btn" onClick={submitFoodSearch}>Submit</button>

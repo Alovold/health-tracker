@@ -12,7 +12,7 @@ function App() {
       <nav className='NavBar'>
         <ul>
           <li>
-            <NavLink to="/">Home</ NavLink>
+            <NavLink to="/health-tracker">Home</ NavLink>
           </li>
           <li>
             <NavLink to="/recipe">Recipe Finder</ NavLink>
@@ -29,7 +29,7 @@ function App() {
       </header>
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/health-tracker" element={<HomePage />} />
         <Route path="/recipe" element={<RecipePage />} />
         <Route path="/goals" element={<GoalsPage />} />
       </Routes>
