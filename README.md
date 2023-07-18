@@ -18,7 +18,10 @@ This project was built for tracking eating as well as nutrition goals and sugges
 
 
 ## Installation
-Currently to run this project you will need to clone the repository, make sure to npm i to install the dependencies, and correctly fill your .env file with valid RapidAPI and Edamam keys and ids. This section will be updated once a database has been implemented and the project is prepared for a web launch
+Simply go to the github page linked below and access the site from your browser!
+https://alovold.github.io/health-tracker/
+
+If you would like to clone the repository, make sure to npm i to install the dependencies, and correctly fill your .env file with valid RapidAPI and Edamam keys and ids. 
 
 ## Usage
 This Project is used for searching the Edamam food and grocery database to create a list of foods eaten in the day, tracking various nutritional goals, and using the data from the list and goals in order to run a much more robust and helpful search through the Edamam Recipe database for meals to complete nutritional goals. Users may search for various foods using natural language processing and add various searches to their food list. Users may also add custom goals for various nutritional areas, such as calories or protein. Using this data or custom data, users may also search for recipes that match or are close to multiple features.
